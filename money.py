@@ -4,11 +4,9 @@ import time
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import sys
+from password import *
 
 def fetch_mochikabu():
-    mochikabu_code = 'xxxxxxxxx'
-    kaiin_code     = 'xxxxxxxxx'
-    password       = 'xxxxxxxxx'
     url = "https://mochikabukai.mizuho-sc.com/kai/KiLoginPre.do"
 
     driver = webdriver.Chrome()
@@ -24,15 +22,15 @@ def fetch_mochikabu():
     time.sleep(2)
 
     mochikabu_form = driver.find_element_by_name("kiLoginInDTO.motikabuCd")
-    mochikabu_form.send_keys(mochikabu_code)
+    mochikabu_form.send_keys(MOCHIKABU_CODE)
     time.sleep(1)
 
     kaiin_form = driver.find_element_by_name("kiLoginInDTO.compositeKaiinCd")
-    kaiin_form.send_keys(kaiin_code)
+    kaiin_form.send_keys(MOCHIKABU_KAIIN)
     time.sleep(1)
 
     password_form = driver.find_element_by_name("kiLoginInDTO.password")
-    password_form.send_keys(password)
+    password_form.send_keys(MOCHIKABU_PASS)
     time.sleep(1)
 
     driver.find_element_by_xpath('//input[@value="ログイン"]').click()
@@ -66,12 +64,11 @@ def fetch_mochikabu():
 
 def insert_to_sheet(data):
     scope  = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds  = ServiceAccountCredentials.from_json_keyfile_name('/path/to/secret.json', scope)
+    creds  = ServiceAccountCredentials.from_json_keyfile_name(GSPREAD_SECRET_PATH, scope)
     client = gspread.authorize(creds)
-    seet_key = 'xxxxxxxxxx'
 
-    books  = client.open_by_key(sheet_key)
-    sheet  = books.worksheet('sheet_name')
+    books  = client.open_by_key(MOCHIKABU_SHEET_KEY)
+    sheet  = books.worksheet(MOCHIKABU_SHEET_NAME)
 
     kabuka = float(sheet.acell('B1').value.replace(chr(165),'').replace(',',''))
 
