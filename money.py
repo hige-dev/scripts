@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import time
 import gspread
@@ -9,7 +10,10 @@ from password import *
 def fetch_mochikabu():
     url = "https://mochikabukai.mizuho-sc.com/kai/KiLoginPre.do"
 
-    driver = webdriver.Chrome()
+    options = Options()
+    options.add_argument('--headless')
+
+    driver = webdriver.Chrome(options=options)
     driver.get(url)
     time.sleep(3)
 
