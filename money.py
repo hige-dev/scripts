@@ -5,7 +5,7 @@ import time
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import sys
-from password import *
+from settings import *
 
 def fetch_mochikabu():
     url = "https://mochikabukai.mizuho-sc.com/kai/KiLoginPre.do"
