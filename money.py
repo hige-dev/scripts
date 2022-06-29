@@ -77,8 +77,11 @@ def insert_to_sheet(data):
     kabuka = float(sheet.acell('B1').value.replace(chr(165),'').replace(',',''))
 
     data_arr = [data['Ym'], data['kabu'], data['_mod'], data['_avg'], kabuka]
+    last_date = sheet.col_values(1)[-1]
 
-    if sheet.col_values(1)[-1] < data['Ym']:
+    if '賞与' in last_date and last_date.replace('賞与','') == data['Ym']:
+        sheet.append_row(data_arr)
+    elif last_date < data['Ym']:
         sheet.append_row(data_arr)
     else:
         sys.exit(0)
