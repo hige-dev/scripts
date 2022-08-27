@@ -56,7 +56,7 @@ def fetch_mochikabu():
     infos = soup.find_all("table", attrs={"class":"tblbasic"})
 
     data = {
-        "Ym": str(infos[0].find_all("td")[2].text.replace('\xa0給与','')),
+        "Ym": str(infos[0].find_all("td")[2].text.replace('給与','')).replace('\xa0',''),
         "kabu": float(infos[0].find_all("td")[3].text.replace('株', '')),
         "_mod": int(infos[0].find_all("td")[4].text.replace('円', '')),
         "_avg": float(infos[0].find_all("td")[5].text.replace('円', '').replace(',',''))
@@ -74,9 +74,10 @@ def insert_to_sheet(data):
     books  = client.open_by_key(MOCHIKABU_SHEET_KEY)
     sheet  = books.worksheet(MOCHIKABU_SHEET_NAME)
 
-    kabuka = float(sheet.acell('B1').value.replace(chr(165),'').replace(',',''))
+    kabuka = float(sheet.acell('E1').value.replace(chr(165),'').replace(',',''))
+    total  = data['kabu'] * data['_avg'] + data['_mod']
 
-    data_arr = [data['Ym'], data['kabu'], data['_mod'], data['_avg'], kabuka]
+    data_arr = [data['Ym'], data['kabu'], data['_mod'], data['_avg'], kabuka, total]
     last_date = sheet.col_values(1)[-1]
 
     if '賞与' in last_date and last_date.replace('賞与','') == data['Ym']:
