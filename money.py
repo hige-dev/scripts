@@ -74,7 +74,7 @@ def insert_to_sheet(data):
     books  = client.open_by_key(MOCHIKABU_SHEET_KEY)
     sheet  = books.worksheet(MOCHIKABU_SHEET_NAME)
 
-    kabuka = float(sheet.acell('E1').value.replace(chr(165),'').replace(',',''))
+    kabuka = float(sheet.acell('E2').value.replace(chr(165),'').replace(',',''))
     total  = data['kabu'] * data['_avg'] + data['_mod']
 
     data_arr = [data['Ym'], data['kabu'], data['_mod'], data['_avg'], kabuka, total]
